@@ -14,9 +14,7 @@
 
 - **Người phát triển (Developer)**: Dang Nhat Nhat
 - **Vị trí định hướng (Target Role)**: System Administrator / IT Helpdesk
-- **Link Live Demo**: https://github.com/GowShrek/it-asset-management
 - **Liên hệ**: [dangn2186@gmail.com | [0362362729] ]
-
 ---
 
 ## 🎯 Bài Toán Doanh Nghiệp & Giải Pháp (Business Impact & Enterprise Problem)
