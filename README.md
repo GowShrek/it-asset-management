@@ -12,10 +12,10 @@
 
 ## 👨‍💻 Tác Giả & Thông Tin Dự Án (Developer & Project Specs)
 
-- **Người phát triển (Developer)**: [Tên Của Bạn / Your Full Name]
-- **Vị trí định hướng (Target Role)**: System Administrator / IT Support Engineer / Front-End Developer
-- **Link Live Demo**: [https://<ten-user-github>.github.io/it-asset-management/](https://<ten-user-github>.github.io/it-asset-management/)
-- **Liên hệ**: [Email của bạn] | [Số điện thoại] | [LinkedIn Profile]
+- **Người phát triển (Developer)**: Dang Nhat Nhat
+- **Vị trí định hướng (Target Role)**: System Administrator / IT Helpdesk
+- **Link Live Demo**: https://github.com/GowShrek/it-asset-management
+- **Liên hệ**: [dangn2186@gmail.com | [0362362729] ]
 
 ---
 
@@ -110,6 +110,6 @@ Dự án được xây dựng theo chuẩn Web tiêu chuẩn, **không cần cà
 
 Dự án được phát triển độc quyền bởi **[Tên Của Bạn]** làm sản phẩm Portfolio chứng minh năng lực kỹ thuật và tư duy bài toán CNTT doanh nghiệp.
 
-- **Email**: [Email của bạn]
-- **LinkedIn**: [Link LinkedIn của bạn]
-- **GitHub**: [Link GitHub của bạn]
+- **Email**: dangn2186@gmail.com
+
+- **GitHub**: https://github.com/GowShrek
