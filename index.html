@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Thống Kê | Nexus ITAM</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Application Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="dashboard">
+
+  <div class="app-container">
+    
+    <!-- Shared Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-logo">
+          <i class="fa-solid fa-server"></i>
+        </div>
+        <div class="brand-text">
+          <h2>Nexus<span>ITAM</span></h2>
+          <span class="version-tag">v3.2 Modular Enterprise</span>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <div class="nav-section-label">TỔNG QUAN</div>
+        <a href="index.html" class="nav-item active">
+          <i class="fa-solid fa-chart-pie"></i>
+          <span>Dashboard Thống Kê</span>
+        </a>
+        
+        <div class="nav-section-label">QUẢN LÝ TÀI SẢN</div>
+        <a href="hardware.html" class="nav-item">
+          <i class="fa-solid fa-laptop"></i>
+          <span>Thiết Bị Phần Cứng</span>
+          <span class="badge" id="badge-hardware-count">0</span>
+        </a>
+        <a href="licenses.html" class="nav-item">
+          <i class="fa-solid fa-key"></i>
+          <span>Bản Quyền Phần Mềm</span>
+          <span class="badge" id="badge-license-count">0</span>
+        </a>
+
+        <div class="nav-section-label">VẬN HÀNH & BẢO TRÌ</div>
+        <a href="maintenance.html" class="nav-item">
+          <i class="fa-solid fa-wrench"></i>
+          <span>Nhật Ký Bảo Trì</span>
+        </a>
+        <a href="audit.html" class="nav-item">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+          <span>Lịch Sử Hoạt Động</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-card">
+          <div class="avatar"><i class="fa-solid fa-user-gear"></i></div>
+          <div class="user-info">
+            <span class="user-name">IT Admin Portfolio</span>
+            <span class="user-role">Administrator</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Top Header -->
+      <header class="top-header">
+        <div class="header-search">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="global-search" placeholder="Tìm kiếm nhanh mã tài sản, tên thiết bị...">
+        </div>
+
+        <div class="header-actions">
+          <button class="btn btn-outline" id="btn-seed-data" title="Nạp dữ liệu mẫu ITAM">
+            <i class="fa-solid fa-database"></i>
+            <span>Dữ Liệu Mẫu</span>
+          </button>
+          
+          <button class="btn btn-outline" id="btn-export-csv" title="Xuất dữ liệu ra file Excel CSV">
+            <i class="fa-solid fa-file-csv"></i>
+            <span>Xuất CSV</span>
+          </button>
+
+          <div class="divider"></div>
+
+          <button class="theme-toggle" id="btn-theme-toggle" title="Đổi giao diện Sáng / Tối">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+        </div>
+      </header>
+
+      <!-- Dashboard View Content -->
+      <div class="content-body">
+        <div class="page-title-bar">
+          <div>
+            <h1 class="page-title">Dashboard Tổng Quan & Khấu Hao IT</h1>
+            <p class="page-subtitle">Thống kê chỉ số KPI, định giá tài sản & tỷ lệ khấu hao thời gian thực</p>
+          </div>
+          <div class="live-indicator">
+            <span class="dot pulse"></span> Dữ liệu thời gian thực
+          </div>
+        </div>
+
+        <!-- KPI Cards Grid -->
+        <div class="kpi-grid">
+          <div class="kpi-card glass">
+            <div class="kpi-icon icon-blue"><i class="fa-solid fa-boxes-stacked"></i></div>
+            <div class="kpi-details">
+              <span class="kpi-label">Tổng Thiết Bị IT</span>
+              <h2 class="kpi-value" id="kpi-total-assets">0</h2>
+              <span class="kpi-subtext text-positive"><i class="fa-solid fa-arrow-trend-up"></i> Quản lý toàn hệ thống</span>
+            </div>
+          </div>
+
+          <div class="kpi-card glass">
+            <div class="kpi-icon icon-green"><i class="fa-solid fa-sack-dollar"></i></div>
+            <div class="kpi-details">
+              <span class="kpi-label">Tổng Nguyên Giá Mua</span>
+              <h2 class="kpi-value" id="kpi-total-value">$0</h2>
+              <span class="kpi-subtext">Định giá ban đầu</span>
+            </div>
+          </div>
+
+          <div class="kpi-card glass">
+            <div class="kpi-icon icon-cyan"><i class="fa-solid fa-chart-line-down"></i></div>
+            <div class="kpi-details">
+              <span class="kpi-label">Giá Trị Hiện Tại (Khấu Hao)</span>
+              <h2 class="kpi-value" id="kpi-depreciated-value">$0</h2>
+              <span class="kpi-subtext text-positive" id="kpi-depreciation-pct">Giá trị thực còn lại</span>
+            </div>
+          </div>
+
+          <div class="kpi-card glass">
+            <div class="kpi-icon icon-purple"><i class="fa-solid fa-user-check"></i></div>
+            <div class="kpi-details">
+              <span class="kpi-label">Tài Sản Đang Sử Dụng</span>
+              <h2 class="kpi-value" id="kpi-in-use">0</h2>
+              <span class="kpi-subtext text-accent" id="kpi-utilization-rate">0% Tỷ lệ cấp phát</span>
+            </div>
+          </div>
+
+          <div class="kpi-card glass">
+            <div class="kpi-icon icon-orange"><i class="fa-solid fa-shield-virus"></i></div>
+            <div class="kpi-details">
+              <span class="kpi-label">SaaS / License Bản Quyền</span>
+              <h2 class="kpi-value" id="kpi-total-licenses">0</h2>
+              <span class="kpi-subtext text-warning">Đang theo dõi</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-grid">
+          <div class="chart-card glass">
+            <div class="chart-header">
+              <h3><i class="fa-solid fa-chart-pie"></i> Phân Bổ Theo Danh Mục Tài Sản</h3>
+            </div>
+            <div class="chart-wrapper">
+              <canvas id="chart-category"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-card glass">
+            <div class="chart-header">
+              <h3><i class="fa-solid fa-chart-column"></i> Trạng Thái Vận Hành Đội Thiết Bị</h3>
+            </div>
+            <div class="chart-wrapper">
+              <canvas id="chart-status"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dashboard Bottom Widgets -->
+        <div class="dashboard-bottom-grid">
+          <div class="widget-card glass">
+            <div class="widget-header">
+              <h3><i class="fa-solid fa-triangle-exclamation"></i> Cảnh Báo Bảo Hành & Hạn SaaS</h3>
+            </div>
+            <div class="widget-body" id="alerts-list"></div>
+          </div>
+
+          <div class="widget-card glass">
+            <div class="widget-header">
+              <h3><i class="fa-solid fa-clock-rotate-left"></i> Hoạt Động Gần Đây</h3>
+            </div>
+            <div class="widget-body" id="recent-logs-list"></div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

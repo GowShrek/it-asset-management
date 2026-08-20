@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quản Lý Thiết Bị Phần Cứng | Nexus ITAM</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="hardware">
+
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-logo"><i class="fa-solid fa-server"></i></div>
+        <div class="brand-text">
+          <h2>Nexus<span>ITAM</span></h2>
+          <span class="version-tag">v3.2 Modular Enterprise</span>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <div class="nav-section-label">TỔNG QUAN</div>
+        <a href="index.html" class="nav-item">
+          <i class="fa-solid fa-chart-pie"></i>
+          <span>Dashboard Thống Kê</span>
+        </a>
+        
+        <div class="nav-section-label">QUẢN LÝ TÀI SẢN</div>
+        <a href="hardware.html" class="nav-item active">
+          <i class="fa-solid fa-laptop"></i>
+          <span>Thiết Bị Phần Cứng</span>
+          <span class="badge" id="badge-hardware-count">0</span>
+        </a>
+        <a href="licenses.html" class="nav-item">
+          <i class="fa-solid fa-key"></i>
+          <span>Bản Quyền Phần Mềm</span>
+          <span class="badge" id="badge-license-count">0</span>
+        </a>
+
+        <div class="nav-section-label">VẬN HÀNH & BẢO TRÌ</div>
+        <a href="maintenance.html" class="nav-item">
+          <i class="fa-solid fa-wrench"></i>
+          <span>Nhật Ký Bảo Trì</span>
+        </a>
+        <a href="audit.html" class="nav-item">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+          <span>Lịch Sử Hoạt Động</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-card">
+          <div class="avatar"><i class="fa-solid fa-user-gear"></i></div>
+          <div class="user-info">
+            <span class="user-name">IT Admin Portfolio</span>
+            <span class="user-role">Administrator</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Top Header -->
+      <header class="top-header">
+        <div class="header-search">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="global-search" placeholder="Tìm kiếm nhanh mã tài sản, tên thiết bị, serial...">
+        </div>
+
+        <div class="header-actions">
+          <button class="btn btn-outline" id="btn-scan-qr" title="Quét mã QR bằng Camera Webcam">
+            <i class="fa-solid fa-camera"></i>
+            <span>Quét QR Cam</span>
+          </button>
+
+          <button class="btn btn-outline" id="btn-import-csv" title="Nhập từ file CSV">
+            <i class="fa-solid fa-file-import"></i>
+            <span>Nhập CSV</span>
+          </button>
+          <input type="file" id="file-import-csv" accept=".csv" style="display: none;">
+          
+          <button class="btn btn-outline" id="btn-export-csv" title="Xuất dữ liệu ra file CSV">
+            <i class="fa-solid fa-file-csv"></i>
+            <span>Xuất CSV</span>
+          </button>
+
+          <button class="btn btn-primary" id="btn-add-asset">
+            <i class="fa-solid fa-plus"></i>
+            <span>Thêm Tài Sản</span>
+          </button>
+
+          <div class="divider"></div>
+
+          <button class="theme-toggle" id="btn-theme-toggle" title="Đổi giao diện Sáng / Tối">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+        </div>
+      </header>
+
+      <!-- Hardware View Content -->
+      <div class="content-body">
+        <div class="page-title-bar">
+          <div>
+            <h1 class="page-title">Quản Lý Thiết Bị Phần Cứng & Khấu Hao</h1>
+            <p class="page-subtitle">Danh sách Laptop, Máy tính, Server, Màn hình & Khấu hao thời gian thực</p>
+          </div>
+          <button class="btn btn-outline" id="btn-print-audit-sheet" title="Tạo phiếu kiểm kê / bàn giao để in A4">
+            <i class="fa-solid fa-print"></i> In Phiếu Kiểm Kê Phòng Ban
+          </button>
+        </div>
+
+        <!-- Filter & Controls Toolbar -->
+        <div class="filter-toolbar glass">
+          <div class="filter-group">
+            <label><i class="fa-solid fa-filter"></i> Danh mục:</label>
+            <select id="filter-category" class="form-control">
+              <option value="ALL">Tất cả danh mục</option>
+              <option value="Laptop">Laptop / Máy tính bảng</option>
+              <option value="Desktop">Desktop / Trạm làm việc</option>
+              <option value="Server">Máy chủ (Server)</option>
+              <option value="Monitor">Màn hình</option>
+              <option value="Networking">Thiết bị mạng</option>
+              <option value="Mobile">Điện thoại di động</option>
+              <option value="Peripheral">Phụ kiện & Khác</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label><i class="fa-solid fa-sliders"></i> Trạng thái:</label>
+            <select id="filter-status" class="form-control">
+              <option value="ALL">Tất cả trạng thái</option>
+              <option value="In Use">Đang sử dụng (In Use)</option>
+              <option value="Available">Sẵn sàng cấp (Available)</option>
+              <option value="Maintenance">Đang sửa chữa (Maintenance)</option>
+              <option value="Retired">Đã thanh lý (Retired)</option>
+            </select>
+          </div>
+
+          <div class="filter-group">
+            <label><i class="fa-solid fa-building"></i> Phòng ban:</label>
+            <select id="filter-department" class="form-control">
+              <option value="ALL">Tất cả phòng ban</option>
+              <option value="IT System">Công Nghệ Thông Tin</option>
+              <option value="Software Dev">Phát Triển Phần Mềm</option>
+              <option value="Marketing">Marketing & Sales</option>
+              <option value="HR & Admin">Nhân Sự & Hành Chính</option>
+              <option value="Finance">Tài Chính Kế Toán</option>
+              <option value="Stock Room">Kho IT</option>
+            </select>
+          </div>
+
+          <button class="btn btn-outline" id="btn-reset-filters">
+            <i class="fa-solid fa-arrow-rotate-left"></i> Đặt lại
+          </button>
+        </div>
+
+        <!-- Data Table Card -->
+        <div class="table-card glass">
+          <div class="table-wrapper">
+            <table class="data-table" id="hardware-table">
+              <thead>
+                <tr>
+                  <th>Mã Asset Tag</th>
+                  <th>Tên Thiết Bị / Model</th>
+                  <th>Danh Mục</th>
+                  <th>Số Serial</th>
+                  <th>Người Giữ / Phòng Ban</th>
+                  <th>Nguyên Giá / Hiện Tại (Khấu Hao)</th>
+                  <th>Trạng Thái</th>
+                  <th class="text-right">Thao Tác</th>
+                </tr>
+              </thead>
+              <tbody id="hardware-table-body"></tbody>
+            </table>
+          </div>
+          
+          <div class="table-footer">
+            <span class="results-count" id="table-results-info">Hiển thị 0 thiết bị</span>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL 1: ADD / EDIT ASSET -->
+  <div class="modal-backdrop" id="modal-asset">
+    <div class="modal-dialog glass">
+      <div class="modal-header">
+        <h3 id="modal-asset-title"><i class="fa-solid fa-plus-circle"></i> Thêm Tài Sản Mới</h3>
+        <button class="btn-close" id="modal-asset-close">&times;</button>
+      </div>
+      <form id="form-asset">
+        <input type="hidden" id="asset-id">
+        <div class="modal-body grid-2">
+          <div class="form-group">
+            <label class="required">Mã Tài Sản (Asset Tag):</label>
+            <input type="text" id="asset-tag" class="form-control" placeholder="AST-LAP-001" required>
+          </div>
+          <div class="form-group">
+            <label class="required">Tên Thiết Bị / Model:</label>
+            <input type="text" id="asset-name" class="form-control" placeholder="MacBook Pro M2 Max" required>
+          </div>
+          <div class="form-group">
+            <label class="required">Danh Mục:</label>
+            <select id="asset-category" class="form-control" required>
+              <option value="Laptop">Laptop / Máy tính bảng</option>
+              <option value="Desktop">Desktop / Trạm làm việc</option>
+              <option value="Server">Máy chủ (Server)</option>
+              <option value="Monitor">Màn hình</option>
+              <option value="Networking">Thiết bị mạng</option>
+              <option value="Mobile">Điện thoại di động</option>
+              <option value="Peripheral">Phụ kiện & Khác</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Số Serial (S/N):</label>
+            <input type="text" id="asset-serial" class="form-control" placeholder="C02G1928MD6R">
+          </div>
+          <div class="form-group">
+            <label>Người Sử Dụng (Check-out):</label>
+            <input type="text" id="asset-user" class="form-control" placeholder="Nguyễn Văn A">
+          </div>
+          <div class="form-group">
+            <label>Phòng Ban:</label>
+            <select id="asset-department" class="form-control">
+              <option value="IT System">Công Nghệ Thông Tin</option>
+              <option value="Software Dev">Phát Triển Phần Mềm</option>
+              <option value="Marketing">Marketing & Sales</option>
+              <option value="HR & Admin">Nhân Sự & Hành Chính</option>
+              <option value="Finance">Tài Chính Kế Toán</option>
+              <option value="Stock Room">Kho IT</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="required">Trạng Thái:</label>
+            <select id="asset-status" class="form-control" required>
+              <option value="Available">Sẵn sàng cấp (Available)</option>
+              <option value="In Use">Đang sử dụng (In Use)</option>
+              <option value="Maintenance">Đang sửa chữa (Maintenance)</option>
+              <option value="Retired">Đã thanh lý (Retired)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Giá Mua ($ USD):</label>
+            <input type="number" id="asset-cost" class="form-control" min="0" placeholder="2500">
+          </div>
+          <div class="form-group">
+            <label>Ngày Mua:</label>
+            <input type="date" id="asset-purchase-date" class="form-control">
+          </div>
+          <div class="form-group">
+            <label>Thời Hạn Bảo Hành:</label>
+            <input type="date" id="asset-warranty-date" class="form-control">
+          </div>
+          <div class="form-group full-width">
+            <label>Ghi Chú Cấu Hình / Vị Trí:</label>
+            <textarea id="asset-notes" class="form-control" rows="2" placeholder="Ghi chú cấu hình..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" id="modal-asset-cancel">Hủy Bỏ</button>
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Lưu Tài Sản</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL 2: ASSET QR DRAWER -->
+  <div class="modal-backdrop" id="modal-qr">
+    <div class="modal-dialog glass modal-sm">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-qrcode"></i> Nhãn QR Code Kiểm Kê</h3>
+        <button class="btn-close" id="modal-qr-close">&times;</button>
+      </div>
+      <div class="modal-body text-center">
+        <div class="qr-card">
+          <div class="qr-header-tag">PROPERTY OF NEXUS IT</div>
+          <div id="qrcode-container"></div>
+          <h4 id="qr-asset-name" class="qr-asset-title">Asset Name</h4>
+          <p id="qr-asset-tag" class="qr-asset-code">AST-000</p>
+          <p id="qr-asset-serial" class="qr-asset-sn">SN: N/A</p>
+          <div id="qr-depreciation-info" style="font-size: 11px; margin-top: 6px; border-top: 1px dashed #ccc; padding-top: 6px; color: #333;"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="btn-print-qr"><i class="fa-solid fa-print"></i> In Nhãn QR</button>
+        <button class="btn btn-primary" id="modal-qr-ok">Đóng</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: WEBCAM SCANNER -->
+  <div class="modal-backdrop" id="modal-scanner">
+    <div class="modal-dialog glass modal-sm">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-camera"></i> Quét Mã QR Bằng Camera</h3>
+        <button class="btn-close" id="modal-scanner-close">&times;</button>
+      </div>
+      <div class="modal-body text-center">
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">Đưa mã QR thiết bị vào trước Webcam để nhận diện tự động</p>
+        <div id="interactive-camera-reader" style="width: 100%; border-radius: 12px; overflow: hidden;"></div>
+        <div id="scanner-result-msg" style="margin-top: 10px; font-weight: 700; color: var(--color-green);"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="modal-scanner-cancel">Đóng Camera</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: AUDIT SHEET -->
+  <div class="modal-backdrop" id="modal-audit-sheet">
+    <div class="modal-dialog glass" style="max-width: 800px;">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-file-invoice"></i> Phiếu Kiểm Kê & Bàn Giao Tài Sản</h3>
+        <button class="btn-close" id="modal-audit-sheet-close">&times;</button>
+      </div>
+      <div class="modal-body" id="printable-audit-container"></div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" id="btn-do-print-sheet"><i class="fa-solid fa-print"></i> In Phiếu (A4)</button>
+        <button class="btn btn-primary" id="modal-audit-sheet-ok">Đóng</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

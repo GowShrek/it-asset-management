@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nhật Ký Bảo Trì | Nexus ITAM</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-page="maintenance">
+
+  <div class="app-container">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-logo"><i class="fa-solid fa-server"></i></div>
+        <div class="brand-text">
+          <h2>Nexus<span>ITAM</span></h2>
+          <span class="version-tag">v3.2 Modular Enterprise</span>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <div class="nav-section-label">TỔNG QUAN</div>
+        <a href="index.html" class="nav-item">
+          <i class="fa-solid fa-chart-pie"></i>
+          <span>Dashboard Thống Kê</span>
+        </a>
+        
+        <div class="nav-section-label">QUẢN LÝ TÀI SẢN</div>
+        <a href="hardware.html" class="nav-item">
+          <i class="fa-solid fa-laptop"></i>
+          <span>Thiết Bị Phần Cứng</span>
+          <span class="badge" id="badge-hardware-count">0</span>
+        </a>
+        <a href="licenses.html" class="nav-item">
+          <i class="fa-solid fa-key"></i>
+          <span>Bản Quyền Phần Mềm</span>
+          <span class="badge" id="badge-license-count">0</span>
+        </a>
+
+        <div class="nav-section-label">VẬN HÀNH & BẢO TRÌ</div>
+        <a href="maintenance.html" class="nav-item active">
+          <i class="fa-solid fa-wrench"></i>
+          <span>Nhật Ký Bảo Trì</span>
+        </a>
+        <a href="audit.html" class="nav-item">
+          <i class="fa-solid fa-clock-rotate-left"></i>
+          <span>Lịch Sử Hoạt Động</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-card">
+          <div class="avatar"><i class="fa-solid fa-user-gear"></i></div>
+          <div class="user-info">
+            <span class="user-name">IT Admin Portfolio</span>
+            <span class="user-role">Administrator</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+      
+      <!-- Top Header -->
+      <header class="top-header">
+        <div class="header-search">
+          <i class="fa-solid fa-magnifying-glass search-icon"></i>
+          <input type="text" id="global-search" placeholder="Tìm phiếu bảo trì...">
+        </div>
+
+        <div class="header-actions">
+          <button class="btn btn-primary" id="btn-add-maintenance">
+            <i class="fa-solid fa-wrench"></i>
+            <span>Tạo Phiếu Bảo Trì</span>
+          </button>
+
+          <div class="divider"></div>
+
+          <button class="theme-toggle" id="btn-theme-toggle" title="Đổi giao diện Sáng / Tối">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+        </div>
+      </header>
+
+      <!-- Maintenance View Content -->
+      <div class="content-body">
+        <div class="page-title-bar">
+          <div>
+            <h1 class="page-title">Nhật Ký Bảo Trì & Sửa Chữa</h1>
+            <p class="page-subtitle">Theo dõi sự cố, chi phí sửa chữa và lịch bảo dưỡng định kỳ</p>
+          </div>
+          <button class="btn btn-primary" id="btn-add-maintenance-top">
+            <i class="fa-solid fa-plus"></i> Tạo Phiếu Mới
+          </button>
+        </div>
+
+        <div class="table-card glass">
+          <div class="table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Mã Phiếu</th>
+                  <th>Mã Tài Sản</th>
+                  <th>Loại Bảo Trì</th>
+                  <th>Mô Tả Sự Cố</th>
+                  <th>Ngày Gửi</th>
+                  <th>Chi Phí</th>
+                  <th>Trạng Thái</th>
+                  <th class="text-right">Thao Tác</th>
+                </tr>
+              </thead>
+              <tbody id="maintenance-table-body">
+                <!-- Dynamic maintenance logs -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- MODAL: CREATE MAINTENANCE TICKET -->
+  <div class="modal-backdrop" id="modal-maintenance">
+    <div class="modal-dialog glass">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-wrench"></i> Tạo Phiếu Bảo Trì / Sửa Chữa</h3>
+        <button class="btn-close" id="modal-maintenance-close">&times;</button>
+      </div>
+      <form id="form-maintenance">
+        <div class="modal-body grid-2">
+          <div class="form-group">
+            <label class="required">Mã Tài Sản (Asset Tag):</label>
+            <input type="text" id="maint-asset-tag" class="form-control" placeholder="AST-LAP-001" required>
+          </div>
+
+          <div class="form-group">
+            <label class="required">Loại Bảo Trì:</label>
+            <select id="maint-type" class="form-control" required>
+              <option value="Hardware Repair">Sửa Chữa Phần Cứng</option>
+              <option value="Scheduled Maintenance">Bảo Dưỡng Định Kỳ</option>
+              <option value="Upgrade">Nâng Cấp Thiết Bị</option>
+              <option value="Software Issue">Lỗi Phần Mềm</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Chi Phí Ước Tính ($ USD):</label>
+            <input type="number" id="maint-cost" class="form-control" min="0" value="0">
+          </div>
+
+          <div class="form-group">
+            <label class="required">Ngày Gửi Bảo Trì:</label>
+            <input type="date" id="maint-date" class="form-control" required>
+          </div>
+
+          <div class="form-group full-width">
+            <label class="required">Mô Tả Sự Cố / Yêu Cầu:</label>
+            <textarea id="maint-desc" class="form-control" rows="3" placeholder="Mô tả sự cố..." required></textarea>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" id="modal-maintenance-cancel">Hủy Bỏ</button>
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Tạo Phiếu</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
